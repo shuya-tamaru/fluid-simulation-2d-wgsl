@@ -2,6 +2,8 @@ import Stats from "stats.js";
 import { Device } from "../core/Device";
 import { Renderer } from "../core/Renderer";
 import { attachResize, sizeCanvas } from "./resize";
+import { createAssets } from "../gfx/createAssets";
+import { Scene } from "../scene/Scene";
 
 export async function bootstrap() {
   const canvas = document.querySelector<HTMLCanvasElement>("#app");
@@ -13,8 +15,23 @@ export async function bootstrap() {
   sizeCanvas(canvas);
 
   try {
+    //setup
     const { device, context, format } = await Device.init(canvas);
-    const renderer = new Renderer(device, context, format, canvas);
+
+    //create assets
+    const { fullscreenPlane, resolutionSystem } = createAssets(device, format);
+
+    //create scene
+    const scene = new Scene(fullscreenPlane);
+
+    const renderer = new Renderer(
+      device,
+      context,
+      format,
+      canvas,
+      scene,
+      resolutionSystem
+    );
     await renderer.init();
 
     attachResize(canvas, (w, h) => {
