@@ -1,9 +1,20 @@
 import { FullScreenPlane } from "./FullScreenPlane";
 import { ResolutionSystem } from "../utils/ResolutionSystem";
+import { MouseSystem } from "../utils/MouseSystem";
 
-export function createAssets(device: GPUDevice, format: GPUTextureFormat) {
+export function createAssets(
+  device: GPUDevice,
+  format: GPUTextureFormat,
+  canvas: HTMLCanvasElement
+) {
   const resolutionSystem = new ResolutionSystem(device);
-  const fullscreenPlane = new FullScreenPlane(device, format, resolutionSystem);
+  const mouseSystem = new MouseSystem(device, canvas);
+  const fullscreenPlane = new FullScreenPlane(
+    device,
+    format,
+    resolutionSystem,
+    mouseSystem
+  );
 
-  return { fullscreenPlane, resolutionSystem };
+  return { fullscreenPlane, resolutionSystem, mouseSystem };
 }

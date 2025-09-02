@@ -14,7 +14,8 @@ export function attachResize(
   maxDpr = 2
 ) {
   const apply = () => {
-    const { w, h, changed } = sizeCanvas(canvas, maxDpr);
+    const { w, h, dpr, changed } = sizeCanvas(canvas, maxDpr);
+    console.log(w, h, "w, h");
     if (changed) onResize(w, h);
   };
   apply();

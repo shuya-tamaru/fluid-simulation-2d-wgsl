@@ -11,7 +11,6 @@ export class Renderer {
   constructor(
     device: GPUDevice,
     context: GPUCanvasContext,
-    format: GPUTextureFormat,
     _canvas: HTMLCanvasElement,
     scene: Scene,
     resolutionSystem: ResolutionSystem

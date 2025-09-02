@@ -19,7 +19,11 @@ export async function bootstrap() {
     const { device, context, format } = await Device.init(canvas);
 
     //create assets
-    const { fullscreenPlane, resolutionSystem } = createAssets(device, format);
+    const { fullscreenPlane, resolutionSystem, mouseSystem } = createAssets(
+      device,
+      format,
+      canvas
+    );
 
     //create scene
     const scene = new Scene(fullscreenPlane);
@@ -27,7 +31,6 @@ export async function bootstrap() {
     const renderer = new Renderer(
       device,
       context,
-      format,
       canvas,
       scene,
       resolutionSystem
@@ -38,19 +41,19 @@ export async function bootstrap() {
       renderer.onResize(w, h);
     });
 
-    const stats = new Stats();
-    stats.showPanel(0);
-    document.body.appendChild(stats.dom);
+    // const stats = new Stats();
+    // stats.showPanel(0);
+    // document.body.appendChild(stats.dom);
     let last = performance.now();
 
     const loop = (t: number) => {
-      stats?.begin();
+      // stats?.begin();
 
       last = t;
       renderer.update();
       renderer.render();
 
-      stats?.end();
+      // stats?.end();
       requestAnimationFrame(loop);
     };
     requestAnimationFrame(loop);
