@@ -30,7 +30,7 @@ export async function bootstrap() {
     const scene = new Scene(fullscreenPlane);
 
     //gui
-    new Gui(sitePositions);
+    // new Gui(sitePositions);
 
     const renderer = new Renderer(
       device,
