@@ -11,7 +11,7 @@ export class SitePositions {
   constructor(device: GPUDevice, positionCount: number) {
     this.device = device;
     this.positionCount = positionCount;
-    this.maxPositionCount = 500;
+    this.maxPositionCount = 50;
     this.init();
   }
 

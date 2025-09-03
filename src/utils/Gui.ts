@@ -13,7 +13,7 @@ export class Gui {
 
   init() {
     this.gui
-      .add(this.sitePositions, "positionCount", 10, 500, 1)
+      .add(this.sitePositions, "positionCount", 10, 50, 1)
       .name("Site Positions")
       .onChange((n: number) => {
         this.sitePositions.updatePositions(n);
