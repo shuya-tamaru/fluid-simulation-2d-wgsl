@@ -1,22 +1,23 @@
 import GUI from "lil-gui";
 import { SitePositions } from "../gfx/SitePositions";
+import type { TimeStep } from "./TimeStep";
 
 export class Gui {
   private gui!: GUI;
-  private sitePositions!: SitePositions;
+  private timeStep!: TimeStep;
 
-  constructor(sitePositions: SitePositions) {
-    this.gui = new GUI({ title: "Controls for SitePositions" });
-    this.sitePositions = sitePositions;
+  constructor(timeStep: TimeStep) {
+    this.gui = new GUI({ title: "Controls " });
+    this.timeStep = timeStep;
     this.init();
   }
 
   init() {
     this.gui
-      .add(this.sitePositions, "positionCount", 10, 50, 1)
-      .name("Site Positions")
+      .add(this.timeStep, "gridCount", 3, 100, 1)
+      .name("Divisions")
       .onChange((n: number) => {
-        this.sitePositions.updatePositions(n);
+        this.timeStep.updateGridCount(n);
       });
   }
 

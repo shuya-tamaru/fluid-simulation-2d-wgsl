@@ -20,17 +20,14 @@ export async function bootstrap() {
     const { device, context, format } = await Device.init(canvas);
 
     //create assets
-    const { fullscreenPlane, resolutionSystem, sitePositions, timeStep } = createAssets(
-      device,
-      format,
-      canvas
-    );
+    const { fullscreenPlane, resolutionSystem, sitePositions, timeStep } =
+      createAssets(device, format, canvas);
 
     //create scene
     const scene = new Scene(fullscreenPlane);
 
     //gui
-    new Gui(sitePositions);
+    new Gui(timeStep);
 
     const renderer = new Renderer(
       device,
