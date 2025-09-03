@@ -74,10 +74,16 @@ fn fs_main(input: VSOut) -> @location(0) vec4<f32> {
   let uv = input.pos.xy / res.resolution;
   let fixed_uv = vec2<f32>(uv.x * aspectRatio, uv.y);
 
+
   let ruv = fixed_uv * ts.gridCount;
   let gridPos = floor(ruv);
   var gridCoord: vec2<f32> = fract(ruv);
   gridCoord -= 0.5;
+
+  let mouseUV     = mouse.pos / res.resolution;
+  let mouseFixed  = vec2<f32>(mouseUV.x * aspectRatio, mouseUV.y);
+  let mouseRUv    = mouseFixed * ts.gridCount;
+  let mouseLocal  = (mouseRUv - gridPos) - 0.5;
 
   // 最近傍(d1) / 第2近傍(d2) / 勝者セル＆勝者サイト
   var d1 = 1e9;
@@ -91,7 +97,7 @@ fn fs_main(input: VSOut) -> @location(0) vec4<f32> {
 
       var site = adj;
       let n = noise2d(gridPos + adj);
-      site += sin(ts.timeStep * 0.01 * (n+0.1)) * 0.5;
+      site += sin(ts.timeStep * 0.003 * (n+0.1)) * 0.5;
 
       let dist = length(gridCoord - site);
 
@@ -121,7 +127,7 @@ fn fs_main(input: VSOut) -> @location(0) vec4<f32> {
   color = mix(color, vec3<f32>(1.0), scleraMask); // 白
 
   // 偏心方向（セル依存で安定）
-  var dir = noise2d(winnerCell * 0.73) * 2.0 - vec2<f32>(1.0, 1.0);
+  var dir = mouseLocal - winnerSiteLocal;
   dir = dir / max(length(dir), 1e-4);
   let irisOffset = 0.1;
   let irisCenter = winnerSiteLocal + dir * irisOffset;
