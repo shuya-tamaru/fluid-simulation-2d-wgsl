@@ -4,6 +4,7 @@ import { Renderer } from "../core/Renderer";
 import { attachResize, sizeCanvas } from "./resize";
 import { createAssets } from "../gfx/createAssets";
 import { Scene } from "../scene/Scene";
+import { Gui } from "../utils/Gui";
 
 export async function bootstrap() {
   const canvas = document.querySelector<HTMLCanvasElement>("#app");
@@ -19,7 +20,7 @@ export async function bootstrap() {
     const { device, context, format } = await Device.init(canvas);
 
     //create assets
-    const { fullscreenPlane, resolutionSystem, mouseSystem } = createAssets(
+    const { fullscreenPlane, resolutionSystem, sitePositions } = createAssets(
       device,
       format,
       canvas
@@ -27,6 +28,9 @@ export async function bootstrap() {
 
     //create scene
     const scene = new Scene(fullscreenPlane);
+
+    //gui
+    new Gui(sitePositions);
 
     const renderer = new Renderer(
       device,

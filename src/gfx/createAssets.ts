@@ -1,6 +1,7 @@
 import { FullScreenPlane } from "./FullScreenPlane";
 import { ResolutionSystem } from "../utils/ResolutionSystem";
 import { MouseSystem } from "../utils/MouseSystem";
+import { SitePositions } from "./SitePositions";
 
 export function createAssets(
   device: GPUDevice,
@@ -9,12 +10,14 @@ export function createAssets(
 ) {
   const resolutionSystem = new ResolutionSystem(device);
   const mouseSystem = new MouseSystem(device, canvas);
+  const sitePositions = new SitePositions(device, 30);
   const fullscreenPlane = new FullScreenPlane(
     device,
     format,
     resolutionSystem,
-    mouseSystem
+    mouseSystem,
+    sitePositions
   );
 
-  return { fullscreenPlane, resolutionSystem, mouseSystem };
+  return { fullscreenPlane, resolutionSystem, mouseSystem, sitePositions };
 }
