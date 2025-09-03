@@ -20,9 +20,19 @@ struct SitePositions {
 
 struct TimeStep {
   timeStep: f32,
-  gridCount: f32, 
+  _pad0: f32, 
   _pad1: f32,
   _pad2: f32
+};
+
+struct Uniforms {
+  color1: vec4<f32>,
+  color2: vec4<f32>,
+  color3: vec4<f32>,
+  gridCount: f32,
+  moveStrength: f32,
+  _pad0: f32,
+  _pad1: f32,
 };
 
 fn noise2d(pos: vec2<f32>) -> vec2<f32> {
@@ -45,20 +55,20 @@ fn getRandomColorIndex(gridPos: vec2<f32>) -> u32 {
 fn getGridColor(colorIndex: u32) -> vec3<f32> {
   switch (colorIndex) {
     case 0u: {
-      return vec3<f32>(230.0 / 255.0, 0.0 / 255.0, 18.0 / 255.0); // Human(赤)：#E60012
+      return vec3<f32>(ufs.color1.r / 255.0, ufs.color1.g / 255.0, ufs.color1.b / 255.0); // Human(赤)：#E60012
     }
     case 1u: {
-      return vec3<f32>(0.0 / 255.0, 104.0 / 255.0, 183.0 / 255.0); // Nature(青)：#0068B7
+      return vec3<f32>(ufs.color2.r / 255.0, ufs.color2.g / 255.0, ufs.color2.b / 255.0); // Nature(青)：#0068B7
     }
     default: {
-      return vec3<f32>(210.0 / 255.0, 215.0 / 255.0, 218.0 / 255.0); // System(銀)：#D2D7DA
+      return vec3<f32>(ufs.color3.r / 255.0, ufs.color3.g / 255.0, ufs.color3.b / 255.0); // System(銀)：#D2D7DA
     }
   }
 }
 
 @group(0) @binding(0) var<uniform> res: Resolution;
 @group(0) @binding(1) var<uniform> mouse: Mouse;
-@group(0) @binding(2) var<storage> sitePositions: SitePositions;
+@group(0) @binding(2) var<uniform> ufs: Uniforms;
 @group(0) @binding(3) var<uniform> ts: TimeStep;
 
 @vertex
@@ -75,14 +85,14 @@ fn fs_main(input: VSOut) -> @location(0) vec4<f32> {
   let fixed_uv = vec2<f32>(uv.x * aspectRatio, uv.y);
 
 
-  let ruv = fixed_uv * ts.gridCount;
+  let ruv = fixed_uv * ufs.gridCount;
   let gridPos = floor(ruv);
   var gridCoord: vec2<f32> = fract(ruv);
   gridCoord -= 0.5;
 
   let mouseUV     = mouse.pos / res.resolution;
   let mouseFixed  = vec2<f32>(mouseUV.x * aspectRatio, mouseUV.y);
-  let mouseRUv    = mouseFixed * ts.gridCount;
+  let mouseRUv    = mouseFixed * ufs.gridCount;
   let mouseLocal  = (mouseRUv - gridPos) - 0.5;
 
   // 最近傍(d1) / 第2近傍(d2) / 勝者セル＆勝者サイト
@@ -97,7 +107,7 @@ fn fs_main(input: VSOut) -> @location(0) vec4<f32> {
 
       var site = adj;
       let n = noise2d(gridPos + adj);
-      site += sin(ts.timeStep * 0.003 * (n+0.1)) * 0.5;
+      site += sin(ts.timeStep * 0.003 * (n+0.1)) * ufs.moveStrength;
 
       let dist = length(gridCoord - site);
 
