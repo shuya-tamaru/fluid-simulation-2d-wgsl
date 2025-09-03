@@ -1,4 +1,4 @@
-import Stats from "stats.js";
+// import Stats from "stats.js";
 import { Device } from "../core/Device";
 import { Renderer } from "../core/Renderer";
 import { attachResize, sizeCanvas } from "./resize";
