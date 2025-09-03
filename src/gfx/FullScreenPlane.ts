@@ -3,6 +3,7 @@ import fullscreenShader from "../shaders/fullscreen.wgsl";
 import type { ResolutionSystem } from "../utils/ResolutionSystem";
 import type { MouseSystem } from "../utils/MouseSystem";
 import type { SitePositions } from "./SitePositions";
+import type { TimeStep } from "../utils/TimeStep";
 
 export class FullScreenPlane {
   private device: GPUDevice;
@@ -17,19 +18,22 @@ export class FullScreenPlane {
   private resolutionSystem!: ResolutionSystem;
   private mouseSystem!: MouseSystem;
   private sitePositions!: SitePositions;
+  private timeStep!: TimeStep;
 
   constructor(
     device: GPUDevice,
     format: GPUTextureFormat,
     resolutionSystem: ResolutionSystem,
     mouseSystem: MouseSystem,
-    sitePositions: SitePositions
+    sitePositions: SitePositions,
+    timeStep: TimeStep
   ) {
     this.device = device;
     this.format = format;
     this.resolutionSystem = resolutionSystem;
     this.mouseSystem = mouseSystem;
     this.sitePositions = sitePositions;
+    this.timeStep = timeStep;
     this.init();
   }
 
@@ -67,6 +71,13 @@ export class FullScreenPlane {
             type: "read-only-storage",
           },
         },
+        {
+          binding: 3,
+          visibility: GPUShaderStage.FRAGMENT,
+          buffer: {
+            type: "uniform",
+          },
+        },
       ],
     });
 
@@ -99,6 +110,10 @@ export class FullScreenPlane {
         {
           binding: 2,
           resource: this.sitePositions.getBuffer(),
+        },
+        {
+          binding: 3,
+          resource: this.timeStep.getBuffer(),
         },
       ],
     });

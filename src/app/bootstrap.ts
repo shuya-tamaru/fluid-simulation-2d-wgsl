@@ -20,7 +20,7 @@ export async function bootstrap() {
     const { device, context, format } = await Device.init(canvas);
 
     //create assets
-    const { fullscreenPlane, resolutionSystem, sitePositions } = createAssets(
+    const { fullscreenPlane, resolutionSystem, sitePositions, timeStep } = createAssets(
       device,
       format,
       canvas
@@ -48,10 +48,16 @@ export async function bootstrap() {
     // const stats = new Stats();
     // stats.showPanel(0);
     // document.body.appendChild(stats.dom);
-    let last = performance.now();
+    let last = 0;
+    let totalTime = 0;
 
     const loop = (t: number) => {
       // stats?.begin();
+      const dt = t - last;
+      last = t;
+
+      totalTime += dt;
+      timeStep.set(totalTime);
 
       last = t;
       renderer.update();
