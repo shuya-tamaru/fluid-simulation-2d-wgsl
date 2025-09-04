@@ -14,7 +14,7 @@ export class Uniforms {
       this.color2 = { r: 0, g: 104, b: 183 }; //#0068B7
       this.color3 = { r: 210, g: 215, b: 218 }; //#D2D7DA
       this.gridCount = 24;
-      this.moveStrength = 0.5;
+      this.moveStrength = 0.28;
 
       this.init();
     }

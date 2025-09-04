@@ -95,7 +95,6 @@ fn fs_main(input: VSOut) -> @location(0) vec4<f32> {
   let mouseRUv    = mouseFixed * ufs.gridCount;
   let mouseLocal  = (mouseRUv - gridPos) - 0.5;
 
-  // 最近傍(d1) / 第2近傍(d2) / 勝者セル＆勝者サイト
   var d1 = 1e9;
   var d2 = 1e9;
   var winnerCell = gridPos;
